@@ -42,9 +42,18 @@ def last2(string):
 
 #Write a proramm that returna dictionary of occurences of the alphabet for a given string.
 # Test it with the Lorem upsuj
-#"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 def occurences(text):
-    return
+    text = text.lower()
+    abc_dict = {}
+    for c in text:
+        if c in abc_dict:
+            abc_dict[c] += 1
+        else:
+            abc_dict[c] = 1
+
+    abc_dict.pop(' ', None)
+    return abc_dict
 
 
 #Write a program that maps a list of words into a list of
@@ -147,6 +156,7 @@ def flatten():
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
     fizbuzz()
+    print(occurences(lorem))
 
     def testArrayFront9(self):
         self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
