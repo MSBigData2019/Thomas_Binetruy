@@ -149,14 +149,22 @@ response = {
 
 
 #Given the above response object extract a array of records with columns nombre_de_reservations , auteur and timestamp
-def flatten():
-    return
+def flatten(response):
+    result = [["nombre_de_reservations", "auteur", "timestamp"]]
+    for r in response["records"]:
+        resa = r["fields"]["nombre_de_reservations"]
+        author = r["fields"]["auteur"]
+        timestamp = r["record_timestamp"]
+        result.append([resa, author, timestamp])
+
+    return result
 
 
 # Here's our "unit tests".
 class Lesson1Tests(unittest.TestCase):
     fizbuzz()
     print(occurences(lorem))
+    print(flatten(response))
 
     def testArrayFront9(self):
         self.assertEqual(array_front9([1, 2, 9, 3, 4]), True)
