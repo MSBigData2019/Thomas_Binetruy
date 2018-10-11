@@ -49,13 +49,21 @@ def get_stock_price(soup):
 
     return [price, change]
 
+def get_instit_owned_shares(soup):
+    # document.querySelectorAll(".dataTable > .dataSmall")[2].querySelectorAll("td:nth-of-type(2)")[0]
+    query1 =  ".dataTable > .dataSmall"
+    query2 = "td:nth-of-type(2)"
+    r1 = soup.select(query1)[2]
+    r2 = r1.select(query2)[0]
+    return float(r2.text[:-1])
+
 
 url = "https://www.reuters.com/finance/stocks/financial-highlights/LVMH.PA"
 class Tests(unittest.TestCase):
     soup = BeautifulSoup(get_html(url), 'html.parser')
 
-    def test_last_quarter_sales(self):
-        answer = [13667.7, 13769.0, 13575.0]
+    def test_last_quarter_sales(self, mean, high, low):
+        answer = [mean, high, low]
         result = get_sales(self.soup)
         for i in range(0, len(answer)):
             self.assertEqual(answer[i], result[i])
@@ -66,5 +74,10 @@ class Tests(unittest.TestCase):
         for i in range(0, len(answer)):
             self.assertEqual(answer[i], result[i])
 
-Tests().test_last_quarter_sales()
+    def test_instit(self, answer):
+        result = get_instit_owned_shares(self.soup)
+        self.assertEqual(result, answer)
+
+Tests().test_last_quarter_sales(13667.7, 13769.0, 13575)
 Tests().test_stock_price(-3.35, -1.26)
+Tests().test_instit(20.57)
