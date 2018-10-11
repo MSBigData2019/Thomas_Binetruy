@@ -4,17 +4,14 @@ from bs4 import BeautifulSoup
 
 import urllib
 
-def get_html():
-    url = "https://www.reuters.com/finance/stocks/financial-highlights/LVMH.PA"
+def get_html(url):
     data = urllib.request.urlopen(url)
     html = ""
     for line in data.readlines():
         html += line.__str__()
     return html
 
-soup = BeautifulSoup(get_html(), 'html.parser')
-
-def get_sales():
+def get_sales(soup):
     # st = document.querySelectorAll(".module:nth-of-type(2)")
     sales_table = soup.find_all(class_="module")[2]
 
@@ -35,14 +32,15 @@ def get_sales():
     return [sales_mean, sales_high, sales_low]
 
 
+
+url = "https://www.reuters.com/finance/stocks/financial-highlights/LVMH.PA"
 class Tests(unittest.TestCase):
+    soup = BeautifulSoup(get_html(url), 'html.parser')
+
     def test_last_quarter_sales(self):
         answer = [13667.7, 13769.0, 13575.0]
-        result = get_sales()
+        result = get_sales(self.soup)
         for i in range(0, len(answer)):
             self.assertEqual(answer[i], result[i])
 
-
 Tests().test_last_quarter_sales()
-
-print(get_sales())
