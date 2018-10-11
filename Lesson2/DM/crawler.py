@@ -18,18 +18,13 @@ def get_sales(soup):
     # lqs = st.querySelectorAll("tr:nth-of-type(3)")[0]
     last_quarter_sales = sales_table.find_all("tr")[2]
 
-    # sm = st.querySelectorAll("td:nth-of-type(3)")[0]
-    str_sales_mean = last_quarter_sales.find_all("td")[2].text
-    str_sales_high = last_quarter_sales.find_all("td")[3].text
-    str_sales_low = last_quarter_sales.find_all("td")[4].text
+    sales_stats = []
+    indexes = [2, 3, 4]
+    for i in indexes:
+        string = last_quarter_sales.find_all("td")[i].text
+        sales_stats.append(float(string.replace(",", "")))
 
-    # Reuters uses string as thousands' delimiter
-    # which cannot be parsed by float()
-    sales_mean = float(str_sales_mean.replace(",", ""))
-    sales_high = float(str_sales_high.replace(",", ""))
-    sales_low = float(str_sales_low.replace(",", ""))
-
-    return [sales_mean, sales_high, sales_low]
+    return sales_stats
 
 
 
