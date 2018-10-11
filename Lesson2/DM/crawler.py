@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Crawler v1
 import unittest
 from bs4 import BeautifulSoup
@@ -26,6 +27,27 @@ def get_sales(soup):
 
     return sales_stats
 
+def get_stock_price(soup):
+    # div = document.querySelectorAll(".moduleBody")[0]
+    # span = div.querySelectorAll(".valueContent")[0]
+    # price_str = div.querySelectorAll("span")[0]
+    # change_str = div.querySelectorAll("span")[1]
+    div = soup.find_all(class_="moduleBody")[0]
+    span = div.find_all(class_="valueContent")[0]
+
+    price_str = span.find_all("span")[0].text
+
+    price_str = price_str[price_str.find("€") + 1:]
+    change_str = span.find_all("span")[1].find_all("span")[0].text
+
+    lower_bound = change_str.find("(") + 1
+    upper_bound = change_str.find(")") - 1
+    change_str = change_str[lower_bound:upper_bound]
+
+    price = float(price_str)
+    change = float(change_str)
+
+    return [price, change]
 
 
 url = "https://www.reuters.com/finance/stocks/financial-highlights/LVMH.PA"
@@ -38,4 +60,11 @@ class Tests(unittest.TestCase):
         for i in range(0, len(answer)):
             self.assertEqual(answer[i], result[i])
 
+    def test_stock_price(self, current_price, current_change):
+        answer = [current_price, current_change]
+        result = get_stock_price(self.soup)
+        for i in range(0, len(answer)):
+            self.assertEqual(answer[i], result[i])
+
 Tests().test_last_quarter_sales()
+Tests().test_stock_price(-3.35, -1.26)
