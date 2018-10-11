@@ -57,6 +57,13 @@ def get_instit_owned_shares(soup):
     r2 = r1.select(query2)[0]
     return float(r2.text[:-1])
 
+def get_dividends(soup):
+    q1 = soup.select(".module")[4]
+    q2 = q1.select(".dataTable")[0]
+    q3 = q2.select("tr:nth-of-type(2)")[0]
+    q4 = q3.select('td')[1:]
+    return [float(td.text) for td in q4]
+
 
 url = "https://www.reuters.com/finance/stocks/financial-highlights/LVMH.PA"
 class Tests(unittest.TestCase):
@@ -78,6 +85,14 @@ class Tests(unittest.TestCase):
         result = get_instit_owned_shares(self.soup)
         self.assertEqual(result, answer)
 
+
+    def test_dividend_yield(self, company, industry, sector):
+        answer = [company, industry, sector]
+        result = get_dividends(self.soup)
+        for i in range(0, len(answer)):
+            self.assertEqual(answer[i], result[i])
+
 Tests().test_last_quarter_sales(13667.7, 13769.0, 13575)
 Tests().test_stock_price(-3.35, -1.26)
 Tests().test_instit(20.57)
+Tests().test_dividend_yield(1.92, 1.70, 2.6)
