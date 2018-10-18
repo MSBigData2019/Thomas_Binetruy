@@ -3,7 +3,7 @@
 Bellow, we use Beta Gouv's geolocation API to get information relative to a "commune"
 
 #+BEGIN_SRC restclient
-GET https://geo.api.gouv.fr/communes?codePostal=92200
+  GET https://geo.api.gouv.fr/communes?codePostal=92200
 #+END_SRC
 
 #+RESULTS:
@@ -34,3 +34,19 @@ GET https://geo.api.gouv.fr/communes?codePostal=92200
 // Strict-Transport-Security: max-age=15552000
 // Request duration: 0.122407s
 #+END_SRC
+
+#+BEGIN_SRC sh
+curl https://geo.api.gouv.fr/communes?codePostal=92200 | jq '.[] | {foo: .nom, zip: .codesPostaux[0]}'
+#+END_SRC
+
+#+RESULTS:
+| {   |                   |
+| foo | Neuilly-sur-Seine |
+| zip |             92200 |
+| }   |                   |
+
+* Python multiprocessing
+  
+https://docs.python.org/2/library/multiprocessing.html
+
+
