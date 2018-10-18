@@ -3,13 +3,12 @@
 from bs4 import BeautifulSoup
 import urllib
 import requests
+import json
 
 def get_html(url):
-    headers = {'User-Agent':'Mozilla/5.0'}
+    url += "?access_token=28a6b44efb37db97905de2665eb7473a073bc60a"
     page = requests.get(url)
     return page.text
-
-
 
 def get_usernames(url):
     html = get_html(url)
@@ -19,6 +18,22 @@ def get_usernames(url):
     links = [tr.select("td:nth-of-type(1) > a") for tr in trs]
     return [a[0].text for a in links if len(a) > 0]
 
-url = "https://gist.github.com/paulmillr/2657075"
-usernames = get_usernames(url)
-print(usernames)
+def get_star_avgs():
+    url = "https://gist.github.com/paulmillr/2657075"
+    usernames = get_usernames(url)
+    star_avgs = []
+
+    for u in usernames:
+        print(u)
+        url = f"https://api.github.com/users/{u}/repos"
+        repos = json.loads(get_html(url))
+        stars = [r["stargazers_count"] for r in repos]
+        avg = 0
+        if(len(stars)):
+            avg = sum(stars) / len(stars)
+        star_avgs.append([u, avg])
+
+    return star_avgs
+
+a = get_star_avgs()
+print(a)
