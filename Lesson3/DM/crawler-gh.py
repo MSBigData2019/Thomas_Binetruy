@@ -35,5 +35,14 @@ def get_star_avgs():
 
     return star_avgs
 
-a = get_star_avgs()
-print(a)
+def order_results(result):
+    result.sort(key=lambda x: x[1], reverse=True)
+    return 0
+
+def print_result(result):
+    for r in result:
+        print(r[0], ": ", r[1])
+
+result = get_star_avgs()
+order_results(result)
+print_result(result)
